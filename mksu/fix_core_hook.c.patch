@@ -1,5 +1,5 @@
---- a/kernel/core_hook.c	2025-09-13 01:50:07.829631600 -0400
-+++ b/kernel/core_hook.c	2025-09-13 02:25:10.367738105 -0400
+--- "./kernel/core_hook - Copy.c"	2025-09-13 01:50:07.829631600 -0400
++++ ./kernel/core_hook.c	2025-09-13 02:43:41.051732728 -0400
 @@ -1081,6 +1081,30 @@
  		return 0;
  	}
@@ -31,7 +31,11 @@
  	if (!is_appuid(new_uid) || is_unsupported_uid(new_uid.val)) {
  		// pr_info("handle setuid ignore non application or isolated uid: %d\n", new_uid.val);
  		return 0;
-@@ -1102,7 +1126,11 @@
+@@ -1099,10 +1123,15 @@
+ #endif
+ 	}
+ 
++do_umount:
  	// check old process's selinux context, if it is not zygote, ignore it!
  	// because some su apps may setuid to untrusted_app but they are in global mount namespace
  	// when we umount for such process, that is a disaster!
