@@ -1,5 +1,5 @@
 --- a/kernel/core_hook.c	2025-09-13 01:50:07.829631600 -0400
-+++ b/kernel/core_hook.c	2025-09-13 02:00:02.346309132 -0400
++++ b/kernel/core_hook.c	2025-09-13 02:25:10.367738105 -0400
 @@ -1081,6 +1081,30 @@
  		return 0;
  	}
@@ -36,7 +36,7 @@
  	// because some su apps may setuid to untrusted_app but they are in global mount namespace
  	// when we umount for such process, that is a disaster!
 +#ifdef CONFIG_KSU_SUSFS
-+	bool is_zygote_child = is_zygote_child;  // provided externally in SUSFS
++	// bool is_zygote_child = is_zygote_child;  // provided externally in SUSFS
 +#else
  	bool is_zygote_child = is_zygote(old->security);
 +#endif
