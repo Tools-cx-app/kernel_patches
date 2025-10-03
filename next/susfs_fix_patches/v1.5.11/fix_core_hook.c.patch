@@ -2,7 +2,7 @@ diff --git a/kernel/core_hook.c b/kernel/core_hook.c
 index c1e803d7..1e8f98e6 100644
 --- a/kernel/core_hook.c
 +++ b/kernel/core_hook.c
-@@ -48,15 +48,117 @@
+@@ -48,15 +48,96 @@
  #include "manager.h"
  #include "selinux/selinux.h"
  #include "throne_tracker.h"
@@ -87,27 +87,6 @@ index c1e803d7..1e8f98e6 100644
 +	return ((uid >= 10000 && uid < 19999) || (uid >= 1010000 && uid < 1019999));
 +}
 +
-+bool susfs_is_sdcard_decrypted = false;
-+static struct task_struct *task_ping_sdcard_android;
-+static int susfs_kthread_ping_sdcard_android(void *data) {
-+	struct path p;
-+	char *path = "/sdcard/Android";
-+
-+	pr_info("[%u][%u]susfs: susfs_kthread_ping_sdcard_android() started.\n",
-+				current_uid().val, current->pid);
-+	while (!kthread_should_stop()) {
-+		if (kern_path(path, LOOKUP_FOLLOW, &p)) {
-+			msleep(5000);
-+			continue;
-+		}
-+		susfs_is_sdcard_decrypted = true;
-+		pr_info("[%u][%u]susfs: '%s' is reachable now, susfs_is_sdcard_decrypted: %d\n",
-+					current_uid().val, current->pid, path, susfs_is_sdcard_decrypted);
-+		path_put(&p);
-+		break;
-+	}
-+	return 0;
-+}
 +#endif // #ifdef CONFIG_KSU_SUSFS
 +
  static bool ksu_module_mounted = false;
