@@ -100,7 +100,7 @@ index c1e803d7..1e8f98e6 100644
  
  static inline bool is_allow_su()
  {
-@@ -1049,16 +1130,132 @@
+@@ -1049,16 +1130,141 @@
  	if (check_mnt && !should_umount(&path)) {
  		path_put(&path);
  		return;
@@ -171,6 +171,15 @@ index c1e803d7..1e8f98e6 100644
 +	// Check if spawned process is isolated service first, and force to do umount if so  
 +	if (is_zygote_isolated_service_uid(new_uid.val) && susfs_is_umount_for_zygote_iso_service_enabled) {
 +		goto do_umount;
++	}
++
++	// - Since ksu maanger app uid is excluded in allow_list_arr, so ksu_uid_should_umount(manager_uid)
++	//   will always return true, that's why we need to explicitly check if new_uid.val belongs to
++	//   ksu manager
++	if (ksu_is_manager_uid_valid() &&
++		(new_uid.val % 1000000 == ksu_get_manager_uid())) // % 1000000 in case it is private space uid
++	{
++		return 0;
 +	}
 +
 +	// Check if spawned process is normal user app and needs to be umounted
