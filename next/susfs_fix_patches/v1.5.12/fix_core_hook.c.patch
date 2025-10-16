@@ -100,7 +100,7 @@ index c1e803d7..1e8f98e6 100644
  
  static inline bool is_allow_su()
  {
-@@ -1049,16 +1130,146 @@
+@@ -1049,16 +1130,141 @@
  	if (check_mnt && !should_umount(&path)) {
  		path_put(&path);
  		return;
@@ -195,11 +195,6 @@ index c1e803d7..1e8f98e6 100644
 +	return 0;
 +
 +do_umount:
-+#ifdef CONFIG_KSU_SUSFS_SUS_MAP
-+	// - We exec susfs_run_sus_map_loop() before umounting any sus mounts 
-+	//   since we want the path inherited from zygote's namespace.
-+	susfs_run_sus_map_loop(new_uid.val);
-+#endif
 +#ifdef CONFIG_KSU_SUSFS_TRY_UMOUNT
 +	// susfs come first, and lastly umount by ksu, make sure umount in reversed order
 +	susfs_try_umount_all(new_uid.val);
